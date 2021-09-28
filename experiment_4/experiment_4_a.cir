@@ -1,0 +1,18 @@
+.include ./t14y_tsmc_025_level3.txt
+
+m1 out in 0 0 cmosn l=1u w=1u 
+m2 out in vdd vdd cmosp l=1u w=2u
+
+v_dd vdd 0 3.3
+*v_in in 0 3.3
+v_in in 0 pwl(0 0 2n 0 2.01n 3.3 4n 3.3 4.01n 0 6n 0 6.05n 3.3 8n 3.3 8.05n 0 10n 0 10.1n 3.3 12n 3.3 12.1n 0)
+
+
+.control 
+    tran 0.01n 10n
+    run
+    setplot tran1
+    plot in out
+    plot -v_dd#branch*vdd
+.endc
+.end
