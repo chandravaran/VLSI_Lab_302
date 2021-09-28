@@ -1,0 +1,68 @@
+.include ./t14y_tsmc_025_level3.txt
+
+m1 out in 0 0 cmosn w=6.4u l=1.8u ad=6.84p pd=10.8u as=6.84p ps=10.8u
+r1 vdd out 1k
+c1 out x 0.001p
+
+V_x  x 0 dc 0.00001
+V_dd vdd 0 dc 5
+
+V_in in 0 dc 2.5 pulse(0 5 1n 0.1n 0.1n 2n 4n)
+
+.tran 0.01ns 4n
+
+.control
+foreach res 500 1k 10k 
+alter r1 = $res
+run
+dc V_in 0 10 0.1
+end
+alter r1 = 1K
+.endc
+
+.control
+plot tran1.in tran1.out tran2.out tran3.out
+plot dc1.out dc2.out dc3.out vs in
+plot dc1.V_dd#branch*(-5) dc2.V_dd#branch*(-5) dc3.V_dd#branch*(-5)
+plot tran1.V_x#branch tran2.V_x#branch tran3.V_x#branch
+.endc
+
+***Varing Width***
+
+.control
+foreach wid 3.2u 6.4u 64u 
+alter m1 w = $wid
+run
+dc V_in 0 10 0.1
+end
+alter m1 w = 6.4u
+.endc
+
+.control
+plot tran1.in tran4.out tran5.out tran6.out
+plot dc4.out dc5.out dc6.out vs in
+plot dc4.V_dd#branch*(-5) dc5.V_dd#branch*(-5) dc6.V_dd#branch*(-5)
+plot tran4.V_x#branch tran5.V_x#branch tran6.V_x#branch
+.endc
+
+
+***Varing Length***
+
+.control
+foreach len 0.9u 1.8u 18u 
+alter m1 l = $len
+run
+dc V_in 0 10 0.1
+end
+alter m1 l = 1.8u
+.endc
+
+.control
+plot tran1.in tran7.out tran8.out tran9.out
+plot dc7.out dc8.out dc9.out vs in
+plot dc7.V_dd#branch*(-5) dc8.V_dd#branch*(-5) dc9.V_dd#branch*(-5)
+plot tran7.V_x#branch tran8.V_x#branch tran9.V_x#branch
+.endc
+
+
+.end

@@ -1,0 +1,21 @@
+*Varying input rise time and fall time
+.include ./t14y_tsmc_025_level3.txt
+
+m0 out in 0 0 cmosn w=1u l=1u
+m1 out 0 vdd vdd cmosp w=2.5u l=1u
+c0 out 0 0.01p
+
+v_dd vdd 0 5
+v_in in 0 dc 2.5 pulse(0 5 1n 0.1n 0.1n 2n 4n)
+
+.control
+    foreach cap 0.01p 0.05p 0.1p
+        alter c0 = $cap
+        tran 0.001 4n
+    end
+.endc
+
+.control
+    plot tran1.in tran1.out tran2.out tran3.out
+    plot tran1.v_dd#branch*(-vdd) tran2.v_dd#branch*(-vdd) tran3.v_dd#branch*(-vdd)
+.endc

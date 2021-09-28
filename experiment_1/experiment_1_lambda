@@ -1,0 +1,31 @@
+.include ./t14y_tsmc_025_level3.txt
+
+.MODEL nfet1 NMOS LEVEL=1 LAMBDA=0.5
+
+m3 vdd in 0 0 nfet1 l=2u w=1u
+
+v_dd vdd 0 dc 3.3
+v_in in 0 dc 3.3
+
+.dc v_in 0 3.3 0.1 v_dd 0 3.3 1
+.dc v_dd 0 3.3 0.1 v_in 0 3.3 1
+.control
+foreach lan 0.1 0.5 1
+	altermod m3 lambda=$lan	
+	dc v_in 0 3.3 0.1		
+	dc v_dd 0 3.3 0.1
+end
+.endc
+
+*Input characteristics LAMBDA
+.control
+plot dc1.v_dd#branch*(-1) dc3.v_dd#branch*(-1) dc5.v_dd#branch*(-1) 
+.endc
+
+*Output characteristics
+.control
+plot dc2.v_dd#branch*(-1) dc4.v_dd#branch*(-1) dc6.v_dd#branch*(-1) 
+.endc
+
+
+

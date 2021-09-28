@@ -1,0 +1,130 @@
+.include ./t14y_tsmc_025_level3.txt
+
+m1 vdd in 0 vsb cmosn l=1u w=0.5u
+* power sources excitation etc.
+v_dd vdd 0 3.3
+v_in in 0 3.3
+v_sb 0 vsb 3.3
+
+      *PART A* 
+*Input characteristics*
+
+.control
+dc v_in 0 3.3 0.1 v_dd 0 3.3 1
+plot -dc1.v_dd#branch
+.endc
+
+*Output characteristics*
+
+.control
+dc v_dd 0 3.3 0.1 v_in 0 3.3 1
+plot -dc2.v_dd#branch
+.endc
+ 
+     *PART B*
+*Input to Output characteristics by varing the WIDTH*
+
+.control
+foreach wid 0.25u 0.5u 5u
+	alter m1 w=$wid
+	dc v_in 0 3.3 0.1
+	dc v_dd 0 3.3 0.1
+end
+alter m1 w=0.5u
+.endc
+
+*Input characteristics
+.control
+plot dc3.v_dd#branch*(-1) dc5.v_dd#branch*(-1) dc7.v_dd#branch*(-1) 
+.endc
+
+*Output characteristics
+.control
+plot dc4.v_dd#branch*(-1) dc6.v_dd#branch*(-1) dc8.v_dd#branch*(-1) 
+.endc
+
+
+            *PART C*
+*Input to Output characteristics by varing the LENGTH*
+
+.control
+foreach len 0.5u 1u 10u
+	alter m1 l=$len	
+	dc v_in 0 3.3 0.1		
+	dc v_dd 0 3.3 0.1
+end
+alter m1 l=1u
+.endc
+
+*Input characteristics
+.control
+plot dc9.v_dd#branch*(-1) dc11.v_dd#branch*(-1) dc13.v_dd#branch*(-1) 
+.endc
+
+*Output characteristics
+.control
+plot dc10.v_dd#branch*(-1) dc12.v_dd#branch*(-1) dc14.v_dd#branch*(-1) 
+.endc
+
+
+             *PART D*
+*input to Output characteristics by varing the THRESHOLD VOLTAGE*
+
+.control
+foreach vol 0.1 0.25 0.5
+	altermod m1 VTO=$vol	
+	dc v_in 0 3.3 0.1		
+	dc v_dd 0 3.3 0.1
+end
+alter m1 VTO=0.4238252       
+.endc
+
+*Input characteristics
+.control
+plot dc15.v_dd#branch*(-1) dc17.v_dd#branch*(-1) dc19.v_dd#branch*(-1) 
+.endc
+
+*Output characteristics
+.control
+plot dc16.v_dd#branch*(-1) dc18.v_dd#branch*(-1) dc20.v_dd#branch*(-1) 
+.endc
+
+             *PART E*
+*Input to Output characteristics by varing the TEMPERATURE*
+
+.control
+foreach tem 10 25 50
+	alter m1 TEMP=$tem	
+	dc v_in 0 3.3 0.1		
+	dc v_dd 0 3.3 0.1
+end
+alter m1 TEMP=27
+.endc
+
+*Input characteristics
+.control
+plot dc21.v_dd#branch*(-1) dc23.v_dd#branch*(-1) dc25.v_dd#branch*(-1) 
+.endc
+
+*Output characteristics
+.control
+plot dc22.v_dd#branch*(-1) dc24.v_dd#branch*(-1) dc26.v_dd#branch*(-1) 
+.endc
+
+
+*PART F*
+*Input to Output characteristics by varing the VSB
+.control
+dc v_dd 0 3.3 0.1 v_sb 0 3.3 1
+dc v_in 0 3.3 0.1 v_sb 0 3.3 1
+.endc
+
+*Input characteristics
+.control
+plot dc28.v_dd#branch*(-1) 
+.endc
+
+*Output characteristics
+.control
+plot dc27.v_dd#branch*(-1)  
+*.endc

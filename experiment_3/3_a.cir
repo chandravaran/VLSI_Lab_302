@@ -1,0 +1,79 @@
+*Inverter with pseudo NMOS load varying length
+.include ./t14y_tsmc_025_level3.txt
+
+m0 out in 0 0 cmosn w=1u l=1u
+m1 out 0 vdd vdd cmosp w=2.5u l=1u
+
+V_dd vdd 0 5
+v_in in 0 dc 2.5 pulse(0 5 1n 0.1n 0.1n 2n 4n)
+
+
+*********************************************************
+*Transfer function and transient responce on varying WIDTH of DRIVER mosfet 
+.control
+foreach len 0.5u 1u 10u
+	alter m0 l=$len
+	tran 0.1n 4ns
+	dc v_in 0 5 0.1
+end
+alter m0 l=1u
+.endc
+
+.control
+	plot dc1.out dc2.out dc3.out vs in
+	plot tran1.in tran1.out tran2.out tran3.out
+	plot tran1.v_dd#branch*(-vdd) tran2.v_dd#branch*(-vdd) tran3.v_dd#branch*(-vdd)
+.endc
+
+
+
+*Transfer function and transient responce on varying LENGTH of DRIVER mosfet 
+.control
+foreach len 0.25u 0.5u 1u
+	alter m0 l=$len
+	tran 0.1n 4ns
+	dc v_in 0 5 0.1
+end
+alter m0 l=0.5
+.endc
+
+.control
+	plot dc4.out dc5.out dc6.out vs in
+	plot tran4.in tran4.out tran5.out tran6.out
+	plot tran4.v_dd#branch*(-vdd) tran5.v_dd#branch*(-vdd) tran6.v_dd#branch*(-vdd)
+.endc
+
+
+
+*Transfer function and transient responce on varying WIDTH of LOAD mosfet 
+.control
+foreach wid 1.25u 2.5u 25u
+	alter m1 w=$wid
+	tran 0.1n 4ns
+	dc v_in 0 5 0.1
+end
+alter m1 w=2.5u
+.endc
+
+.control
+	plot dc7.out dc8.out dc9.out vs in
+	plot tran1.in tran7.out tran8.out tran9.out
+	plot tran7.v_dd#branch*(-vdd) tran8.v_dd#branch*(-vdd) tran9.v_dd#branch*(-vdd)
+.endc
+
+*Transfer function and transient responce on varying LENGTH of LOAD mosfet 
+.control
+foreach len 0.5u 1u 10u
+	alter m1 l=$len
+	tran 0.1n 4ns
+	dc v_in 0 5 0.1
+end
+.endc
+
+.control
+	plot dc10.out dc11.out dc12.out vs in
+	plot tran4.in tran10.out tran11.out tran12.out
+	plot tran10.v_dd#branch*(-vdd) tran11.v_dd#branch*(-vdd) tran12.v_dd#branch*(-vdd)
+.endc
+
+

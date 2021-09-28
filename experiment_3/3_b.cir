@@ -1,0 +1,20 @@
+*Varying input rise time and fall time
+.include ./t14y_tsmc_025_level3.txt
+
+m0 out in 0 0 cmosn w=1u l=1u
+m1 out 0 vdd vdd cmosp w=2.5u l=1u
+
+v_dd vdd 0 5
+*v_in vin 0 5
+
+*********************************************************
+v_in in 0 dc 5 pwl(0 0, 5n 0, 5.1n 5, 10n 5, 10.1n 0, 15n 0, 15.25n 5, 20n 5, 20.25n 0, 25n 0, 25.5n 5, 30n 5, 30.5n 0, 35 0)
+
+.control
+    tran 0.001 35n
+.endc
+
+.control
+    plot tran1.in tran1.out
+    plot tran1.v_dd#branch*(-vdd)
+.endc
